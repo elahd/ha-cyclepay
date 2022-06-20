@@ -1,0 +1,15 @@
+{
+  "domain": "cyclepay",
+  "name": "CyclePay for ESD/Hercules Laundry Rooms",
+  "config_flow": true,
+  "documentation": "https://www.github.com/elahd/ha-cyclepay",
+  "issue_tracker": "https://www.github.com/elahd/ha-cyclepay/issues",
+  "requirements": ["pylaundry==v0.1b0"],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@elahd"],
+  "iot_class": "cloud_polling",
+  "version": "v0.1.0"
+}
