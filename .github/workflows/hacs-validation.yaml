@@ -1,4 +1,4 @@
-name: HACS Validation
+name: Home Assistant / HACS Validation
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
     steps:
         - uses: "actions/checkout@v3"
 
-        - name: HACS Action
+        - name: HACS Validation
           uses: hacs/action@main
           with:
             category: "integration"
