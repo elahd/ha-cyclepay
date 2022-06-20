@@ -4,8 +4,12 @@
 <h3>Home Assistant Integration for ESD / Hercules CyclePay Laundry Rooms</h3>
 <p align="center">This is an unofficial project that is not affiliated with ESD or Hercules.</p>
 </div>
-
 <hr>
+<p align="center">
+  <a href="https://www.codacy.com/gh/elahd/ha-cyclepay/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elahd/ha-cyclepay&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/b12010b0327a484b970042deb633f76e"/></a>
+  <img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay">
+  <a href="https://www.buymeacoffee.com/elahd"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg"></a>
+</p>
 
 This integration can be used by anyone who lives in an apartment building and uses one of the below apps to pay for laundry cycles:
 
