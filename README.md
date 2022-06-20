@@ -31,13 +31,13 @@ Use this integration to:
 
 Shows balance on your virtual laundry card.
 
-<img width="33%" src="https://user-images.githubusercontent.com/466460/174522354-86401d5d-c885-4bb0-a7ff-dd78e968e590.png">
+<img width="400px" src="https://user-images.githubusercontent.com/466460/174522354-86401d5d-c885-4bb0-a7ff-dd78e968e590.png">
 
 ### Sensors for Individual Machines
 
 Shows status of individual washers and dryers.
 
-<img width="33%" src="https://user-images.githubusercontent.com/466460/174522757-0b2e73bb-ba62-4f11-8f5b-51733a37ae19.png">
+<img width="400px" src="https://user-images.githubusercontent.com/466460/174522757-0b2e73bb-ba62-4f11-8f5b-51733a37ae19.png">
 
 1. Time Remaining sensor
 2. Machine Running sensor (disabled by default)
@@ -46,7 +46,7 @@ Shows status of individual washers and dryers.
 
 Show how many washers and dryers are available now, in 15 min, 30 min, 45 min, and 60 min. Future availability based on time remaining on currently-running machines.
 
-<img width="33%" src="https://user-images.githubusercontent.com/466460/174523202-e2faae16-a579-44f3-82d5-c569b3560721.png">
+<img width="400px" src="https://user-images.githubusercontent.com/466460/174523202-e2faae16-a579-44f3-82d5-c569b3560721.png">
 
 ## Installation
 
@@ -58,4 +58,7 @@ Support adding funds to machines.
 
 ## Python Library
 
-This integration communicates with CyclePay via [pylaundry](https://github.com/elahd/pylaundry).
+This integration communicates with CyclePay via:
+<p><a href="https://github.com/elahd/pylaundry">
+<img src="https://user-images.githubusercontent.com/466460/174422077-452bdd5c-243b-4487-8bd8-07a0120284d2.png" width="200px" />
+</a></p>
