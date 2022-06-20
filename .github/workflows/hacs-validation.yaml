@@ -8,7 +8,7 @@ on:
 
 jobs:
   validate:
-    name: HASS and Hassfest Validation
+    name: HACS and Hassfest Validation
     runs-on: "ubuntu-latest"
     steps:
         - uses: "actions/checkout@v3"
