@@ -4,7 +4,7 @@
   "config_flow": true,
   "documentation": "https://www.github.com/elahd/ha-cyclepay",
   "issue_tracker": "https://www.github.com/elahd/ha-cyclepay/issues",
-  "requirements": ["pylaundry==v0.1b0"],
+  "requirements": ["pylaundry==v0.1"],
   "ssdp": [],
   "zeroconf": [],
   "homekit": {},
