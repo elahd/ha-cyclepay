@@ -54,7 +54,8 @@ Install via HACS.
 
 ## Future Plans
 
-Support adding funds to machines.
+1. Support adding funds to machines.
+2. Support creating timer for selected in-use machines, probably automatically after adding funds.
 
 ## Python Library
 

@@ -57,7 +57,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     except (CommunicationError, ResponseFormatError, Rejected) as err:
         raise ConfigEntryNotReady from err
     except AuthenticationError as err:
-        raise ConfigEntryAuthFailed from err
+        raise ConfigEntryAuthFailed("Invalid username or password.") from err
 
     async def async_update_data() -> CyclePayCoordinatorLibrary:
         try:
@@ -67,7 +67,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     profile=laundry.profile, machines=laundry.machines
                 )
         except (CommunicationError, ResponseFormatError, Rejected) as err:
-            log.debug("Failed to communicate with API: %s", err)
             raise UpdateFailed("Error communicating with API.") from err
         except AuthenticationError as err:
             raise ConfigEntryAuthFailed from err
