@@ -1,15 +1,20 @@
-<div align="center">
-<img width="40%" src="https://user-images.githubusercontent.com/466460/174525294-68ada609-bc40-4784-8ae0-69306b007817.png" />
-<h1>CyclePay for Home Assistant</h1>
-<h3>Home Assistant Integration for ESD / Hercules CyclePay Laundry Rooms</h3>
+<p align="center"><img width="40%" src="https://user-images.githubusercontent.com/466460/174525294-68ada609-bc40-4784-8ae0-69306b007817.png" /></p>
+<h1 align="center">CyclePay for Home Assistant</h1>
+<h3 align="center">Home Assistant Integration for ESD / Hercules CyclePay Laundry Rooms</h3>
 <p align="center">This is an unofficial project that is not affiliated with ESD or Hercules.</p>
-</div>
-<hr>
+<br />
 <p align="center">
   <a href="https://www.codacy.com/gh/elahd/ha-cyclepay/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elahd/ha-cyclepay&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/b12010b0327a484b970042deb633f76e"/></a>
-  <img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay">
+  <a href="https://results.pre-commit.ci/latest/github/elahd/ha-cyclepay/main"><img src="https://results.pre-commit.ci/badge/github/elahd/ha-cyclepay/main.svg" /></a>
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+  <a href="https://github.com/PyCQA/pylint"><img src="https://img.shields.io/badge/linting-pylint-yellowgreen" /></a>
+  <a href="https://github.com/elahd/ha-cyclepay/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay"></a>
   <a href="https://www.buymeacoffee.com/elahd"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg"></a>
 </p>
+
+<hr />
+
+## Availability
 
 This integration can be used by anyone who lives in an apartment building and uses one of the below apps to pay for laundry cycles:
 
