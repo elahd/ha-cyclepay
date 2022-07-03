@@ -6,6 +6,7 @@
 <p align="center">
   <a href="https://www.codacy.com/gh/elahd/ha-cyclepay/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elahd/ha-cyclepay&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/b12010b0327a484b970042deb633f76e"/></a>
   <a href="https://results.pre-commit.ci/latest/github/elahd/ha-cyclepay/main"><img src="https://results.pre-commit.ci/badge/github/elahd/ha-cyclepay/main.svg" /></a>
+  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-41BDF5.svg" /></a>
   <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
   <a href="https://github.com/PyCQA/pylint"><img src="https://img.shields.io/badge/linting-pylint-yellowgreen" /></a>
   <a href="https://github.com/elahd/ha-cyclepay/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay"></a>
