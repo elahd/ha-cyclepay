@@ -1,15 +1,19 @@
-<div align="center">
-<img width="40%" src="https://user-images.githubusercontent.com/466460/174525294-68ada609-bc40-4784-8ae0-69306b007817.png" />
-<h1>CyclePay for Home Assistant</h1>
-<h3>Home Assistant Integration for ESD / Hercules CyclePay Laundry Rooms</h3>
+<p align="center"><img width="40%" src="https://user-images.githubusercontent.com/466460/174525294-68ada609-bc40-4784-8ae0-69306b007817.png" /></p>
+<h1 align="center">CyclePay for Home Assistant</h1>
+<h3 align="center">Home Assistant Integration for ESD / Hercules CyclePay Laundry Rooms</h3>
 <p align="center">This is an unofficial project that is not affiliated with ESD or Hercules.</p>
-</div>
-<hr>
+<br />
 <p align="center">
   <a href="https://www.codacy.com/gh/elahd/ha-cyclepay/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=elahd/ha-cyclepay&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/b12010b0327a484b970042deb633f76e"/></a>
-  <img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay">
+  <a href="https://results.pre-commit.ci/latest/github/elahd/ha-cyclepay/main"><img src="https://results.pre-commit.ci/badge/github/elahd/ha-cyclepay/main.svg" /></a>
+  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-41BDF5.svg" /></a>
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+  <a href="https://github.com/PyCQA/pylint"><img src="https://img.shields.io/badge/linting-pylint-yellowgreen" /></a>
+  <a href="https://github.com/elahd/ha-cyclepay/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/elahd/ha-cyclepay"></a>
   <a href="https://www.buymeacoffee.com/elahd"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg"></a>
 </p>
+
+<hr />
 
 This integration can be used by anyone who lives in an apartment building and uses one of the below apps to pay for laundry cycles:
 
@@ -26,8 +30,15 @@ CyclePay for Home Assistant is a [Home Assistant](https://home-assistant.io) int
 
 Use this integration to:
 
-1. **Avoid disappointment:** Check whether any machines are available before you head down to your laundry room.
-2. **Prepare emotionally:** If no machines are available, know how long you need to wait to clean your undies.
+1. **Avoid disappointment:** Know whether any machines are available now or will be available in the next hour.
+2. **Pay Easily:** CyclePay is slow and requires a ridiculous number of taps to start and top off your cycle. This integration provides a faster way to add money to machines.
+
+## Warnings
+
+1. **This integration can spend your money.** Theoretically, a bug in this code could drain your entire laundry card or otherwise spend more than you intended.
+2. **This integration is not endorsed or supported by ESD, Hercules, or their business partners.** Use of this integration may have negative consequences, including but not limited to being banned from CyclePay.
+
+**Use this integration _at your own risk_.**
 
 ## Features
 
@@ -58,8 +69,7 @@ Install via HACS.
 
 ## Future Plans
 
-1. Support adding funds to machines.
-2. Support creating timer for selected in-use machines, probably automatically after adding funds.
+1. Support creating timer for selected in-use machines, probably automatically after adding funds.
 
 ## Python Library
 
