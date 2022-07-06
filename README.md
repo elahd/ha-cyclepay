@@ -15,6 +15,8 @@
 
 <hr />
 
+## Availability
+
 This integration can be used by anyone who lives in an apartment building and uses one of the below apps to pay for laundry cycles:
 
 | Logo                                                                                                                           | Name              | Links                                                                                                                                                                    |
