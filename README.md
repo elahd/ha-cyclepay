@@ -54,10 +54,11 @@ Shows balance on your virtual laundry card.
 
 Shows status of individual washers and dryers.
 
-<img width="400px" src="https://user-images.githubusercontent.com/466460/174522757-0b2e73bb-ba62-4f11-8f5b-51733a37ae19.png">
+<img width="400px" src="https://user-images.githubusercontent.com/466460/177440117-542a4939-cade-4660-bfb0-697c0789c233.png">
 
 1. Time Remaining sensor
 2. Machine Running sensor (disabled by default)
+3. Add funds sensor. Can add base and topoff values.
 
 ### Sensors for All Machines (by Type)
 
