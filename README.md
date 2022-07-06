@@ -58,7 +58,7 @@ Shows status of individual washers and dryers.
 
 1. Time Remaining sensor
 2. Machine Running sensor (disabled by default)
-3. Add funds sensor. Can add base and topoff values.
+3. Add funds button. Can add base and topoff values.
 
 ### Sensors for All Machines (by Type)
 
