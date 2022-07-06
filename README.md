@@ -32,8 +32,15 @@ CyclePay for Home Assistant is a [Home Assistant](https://home-assistant.io) int
 
 Use this integration to:
 
-1. **Avoid disappointment:** Check whether any machines are available before you head down to your laundry room.
-2. **Prepare emotionally:** If no machines are available, know how long you need to wait to clean your undies.
+1. **Avoid disappointment:** Know whether any machines are available now or will be available in the next hour.
+2. **Pay Easily:** CyclePay is slow and requires a ridiculous number of taps to start and top off your cycle. This integration provides a faster way to add money to machines.
+
+## Warnings
+
+1. **This integration can spend your money.** Theoretically, a bug in this code could drain your entire laundry card or otherwise spend more than you intended.
+2. **This integration is not endorsed or supported by ESD, Hercules, or their business partners.** Use of this integration may have negative consequences, including but not limited to being banned from CyclePay.
+
+**Use this integration _at your own risk_.**
 
 ## Features
 
@@ -64,8 +71,7 @@ Install via HACS.
 
 ## Future Plans
 
-1. Support adding funds to machines.
-2. Support creating timer for selected in-use machines, probably automatically after adding funds.
+1. Support creating timer for selected in-use machines, probably automatically after adding funds.
 
 ## Python Library
 

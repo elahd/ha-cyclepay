@@ -13,10 +13,10 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity_platform import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from pylaundry import Laundry
 from pylaundry import LaundryMachine
 from pylaundry import MachineType
 
-from . import CyclePayCoordinatorLibrary
 from .const import DOMAIN
 
 log = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ async def async_setup_entry(
     """Set up entities using the binary sensor platform from this config entry."""
     coordinator: DataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
+    coordinator_data: Laundry = coordinator.data
     async_add_entities(
         (
             MachineInUseSensor(
@@ -39,6 +39,7 @@ async def async_setup_entry(
                 machine_id=machine.id_,
             )
             for machine in coordinator_data.machines.values()
+            if isinstance(machine, LaundryMachine)
         ),
         True,
     )
@@ -55,8 +56,8 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
 
         self._machine_id = machine_id
 
-        self.coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
-        machine: LaundryMachine = self.coordinator_data.machines.get(machine_id)
+        self.laundry: Laundry = coordinator.data
+        machine: LaundryMachine = self.laundry.machines.get(machine_id)
 
         self._machine_type: MachineType = machine.type
 
@@ -65,13 +66,17 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
         self._attr_unique_id = f"{machine_id}_running"
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, machine_id)},
-            # "name": f"{machine_type_str} {machine.number}"
         }
 
         self._attr_extra_state_attributes = {
             "machine_type": machine_type_str,
             "base_price": f"${machine.base_price:0,.2f}",
         }
+
+        # if machine.topoff_price:
+        #     self._attr_extra_state_attributes.update(
+        #         {"topoff_price": f"${machine.topoff_price:0,.2f}"}
+        #     )
 
         self._attr_name = f"{machine_type_str} {machine.number}: Running"
 
@@ -82,7 +87,7 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
     def update_device_data(self) -> None:
         """Update the entity when coordinator is updated."""
 
-        machine: LaundryMachine = self.coordinator_data.machines.get(self._machine_id)
+        machine: LaundryMachine = self.laundry.machines.get(self._machine_id)
 
         self._attr_is_on = machine.busy if machine.online else None
 

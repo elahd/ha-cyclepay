@@ -13,11 +13,11 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity_platform import DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from pylaundry import Laundry
 from pylaundry import LaundryMachine
 from pylaundry import LaundryProfile
 from pylaundry import MachineType
 
-from . import CyclePayCoordinatorLibrary
 from .const import DOMAIN
 
 log = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ async def async_setup_entry(
     # Minutes Remaining Sensor
     #
 
-    coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
+    coordinator_data: Laundry = coordinator.data
     async_add_entities(
         (
             MachineMinutesRemainingSensor(
@@ -101,8 +101,8 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
         self._machine_id = machine_id
 
-        self.coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
-        machine: LaundryMachine = self.coordinator_data.machines.get(machine_id)
+        self.laundry: Laundry = coordinator.data
+        machine: LaundryMachine = self.laundry.machines.get(machine_id)
 
         self._machine_type: MachineType = machine.type
 
@@ -120,6 +120,11 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
             "base_price": f"${machine.base_price:0,.2f}",
         }
 
+        # if machine.topoff_price:
+        #     self._attr_extra_state_attributes.update(
+        #         {"topoff_price": f"${machine.topoff_price:0,.2f}"}
+        #     )
+
         self._attr_name = f"{machine_type_str} {machine.number}: Minutes Remaining"
 
         self.update_device_data()
@@ -127,7 +132,7 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
     def update_device_data(self) -> None:
         """Update the entity when coordinator is updated."""
 
-        machine: LaundryMachine = self.coordinator_data.machines.get(self._machine_id)
+        machine: LaundryMachine = self.laundry.machines.get(self._machine_id)
 
         if machine.online:
             self._attr_native_value = (
@@ -180,7 +185,7 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
-        self.coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
+        self.laundry: Laundry = coordinator.data
 
         self._attr_unique_id = f"{username}_laundry_card_balance"
 
@@ -195,7 +200,7 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
     def update_device_data(self) -> None:
         """Update the entity when coordinator is updated."""
 
-        profile: LaundryProfile = self.coordinator_data.profile
+        profile: LaundryProfile = self.laundry.profile
 
         self._attr_native_value = profile.card_balance
 
@@ -229,7 +234,7 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
-        self.coordinator_data: CyclePayCoordinatorLibrary = coordinator.data
+        self.laundry: Laundry = coordinator.data
 
         self._machine_type = machine_type
         self._time_offset = time_offset
@@ -247,7 +252,7 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
     def update_device_data(self) -> None:
         """Update the entity when coordinator is updated."""
 
-        machines = self.coordinator_data.machines
+        machines = self.laundry.machines
 
         self._attr_native_value = len(
             [
