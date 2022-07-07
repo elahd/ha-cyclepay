@@ -53,17 +53,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     except AuthenticationError as err:
         raise ConfigEntryAuthFailed("Invalid username or password.") from err
 
-    #
-    # Get topoff price for each machine
-    #
-
-    # for machine_id, machine in laundry.machines.items():
-    #     try:
-    #         await laundry.async_get_topoff_price(machine_id=machine_id)
-    #     except (CommunicationError, ResponseFormatError, Rejected) as err:
-    #         # Not the worst thing if we don't get the topoff price. Just log and move on.
-    #         log.warning("Failed to get topoff price for machine %s", machine_id)
-
     async def async_update_data() -> Laundry:
         try:
             async with async_timeout.timeout(10):

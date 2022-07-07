@@ -17,6 +17,7 @@ from pylaundry.exceptions import ResponseFormatError
 import voluptuous as vol
 
 from .const import DOMAIN
+from .const import OPT_FULL_LOAD
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +50,13 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
 
     VERSION = 1
 
+    @staticmethod
+    def async_get_options_flow(
+        config_entry: config_entries.ConfigEntry,
+    ) -> OptionsFlow:
+        """Tell Home Assistant that this integration supports configuration options."""
+        return OptionsFlow(config_entry)
+
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
@@ -75,6 +83,44 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
 
         return self.async_show_form(
             step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+        )
+
+
+class OptionsFlow(config_entries.OptionsFlow):  # type: ignore
+    """Handle options flow for CyclePay."""
+
+    def __init__(self, config_entry: config_entries.ConfigEntry):
+        """Initialize options flow."""
+        self.config_entry = config_entry
+        self.options = dict(config_entry.options)
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Handle sole options flow step."""
+
+        errors: dict = {}
+
+        if user_input is not None:
+            self.options.update(user_input)
+            return self.async_create_entry(title="", data=user_input)
+
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    OPT_FULL_LOAD,
+                    default=0
+                    if not (full_dryer_load_swipes := self.options.get(OPT_FULL_LOAD))
+                    else full_dryer_load_swipes,
+                ): int
+            }
+        )
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=schema,
+            errors=errors,
+            last_step=True,
         )
 
 
