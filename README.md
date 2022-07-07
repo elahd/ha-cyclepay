@@ -54,11 +54,12 @@ Shows balance on your virtual laundry card.
 
 Shows status of individual washers and dryers.
 
-<img width="400px" src="https://user-images.githubusercontent.com/466460/177440117-542a4939-cade-4660-bfb0-697c0789c233.png">
+<img width="400px" src="https://user-images.githubusercontent.com/466460/177857676-9d0ff2bc-a479-4f64-8d1a-ea49f912e1a1.png">
 
-1. Time Remaining sensor
-2. Machine Running sensor (disabled by default)
-3. Add funds button. Can add base and topoff values.
+1. **Time remaining sensor**
+2. **Machine running sensor** (hidden by default)
+3. **Single virtual swipe button.** Swipes your virtual card once in any machine.
+4. **Multiple virtual swipes button.** Automatically swipes your card multiple times to add time to your dryer cycle. Number of swipes is configurable via integration options.
 
 ### Sensors for All Machines (by Type)
 
@@ -69,10 +70,6 @@ Show how many washers and dryers are available now, in 15 min, 30 min, 45 min, a
 ## Installation
 
 Install via HACS.
-
-## Future Plans
-
-1. Support creating timer for selected in-use machines, probably automatically after adding funds.
 
 ## Python Library
 
