@@ -4,6 +4,10 @@ DOMAIN = "cyclepay"
 ISSUE_URL = "https://github.com/elahd/ha-cyclepay/issues"
 INTEGRATION_NAME = "CyclePay for ESD/Hercules Laundry Rooms"
 
+EVENT_VEND_BEGIN = "cyclepay_vend_begin"
+
+OPT_FULL_LOAD = "full_dryer_load_swipes"
+
 STARTUP_MESSAGE = f"""
 ===================================================================
 

@@ -8,6 +8,8 @@ from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback
+from homeassistant.core import Event
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.entity_platform import DiscoveryInfoType
@@ -19,6 +21,7 @@ from pylaundry import LaundryProfile
 from pylaundry import MachineType
 
 from .const import DOMAIN
+from .const import EVENT_VEND_BEGIN
 
 log = logging.getLogger(__name__)
 
@@ -40,8 +43,7 @@ async def async_setup_entry(
     async_add_entities(
         (
             MachineMinutesRemainingSensor(
-                coordinator=coordinator,
-                machine_id=machine.id_,
+                coordinator=coordinator, machine_id=machine.id_, hass=hass
             )
             for machine in coordinator_data.machines.values()
             if isinstance(machine, LaundryMachine)
@@ -93,44 +95,46 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
     # _attr_device_class = SensorDeviceClass.DURATION
     # _attr_native_unit_of_measurement = homeassistant.const.TIME_MINUTES
 
-    _attr_native_unit_of_measurement = "min"
-
-    def __init__(self, coordinator: DataUpdateCoordinator, machine_id: str):
+    def __init__(
+        self, coordinator: DataUpdateCoordinator, machine_id: str, hass: HomeAssistant
+    ) -> None:
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
         self._machine_id = machine_id
 
         self.laundry: Laundry = coordinator.data
-        machine: LaundryMachine = self.laundry.machines.get(machine_id)
+        self.machine: LaundryMachine = self.laundry.machines[machine_id]
 
-        self._machine_type: MachineType = machine.type
+        self._machine_type: MachineType = self.machine.type
 
-        machine_type_str = str(machine.type.value).title()
+        machine_type_str = str(self.machine.type.value).title()
 
-        self._attr_unique_id = f"{machine_id}_minutes_remaining"
+        self._attr_unique_id = (
+            f"{self.laundry.profile.user_id}_{machine_id}_minutes_remaining"
+        )
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, machine_id)},
-            "name": f"{machine_type_str} {machine.number}",
+            "name": f"{machine_type_str} {self.machine.number}",
             "suggested_area": "Laundry Room",
         }
 
         self._attr_extra_state_attributes = {
             "machine_type": machine_type_str,
-            "base_price": f"${machine.base_price:0,.2f}",
+            "base_price": f"${self.machine.base_price:0,.2f}",
+            "running": None,
         }
 
-        # if machine.topoff_price:
-        #     self._attr_extra_state_attributes.update(
-        #         {"topoff_price": f"${machine.topoff_price:0,.2f}"}
-        #     )
+        self._attr_name = f"{machine_type_str} {self.machine.number}: Minutes Remaining"
 
-        self._attr_name = f"{machine_type_str} {machine.number}: Minutes Remaining"
+        hass.bus.async_listen(EVENT_VEND_BEGIN, self._trigger_vending_state)
 
         self.update_device_data()
 
     def update_device_data(self) -> None:
         """Update the entity when coordinator is updated."""
+
+        self._attr_native_unit_of_measurement = "min"
 
         machine: LaundryMachine = self.laundry.machines.get(self._machine_id)
 
@@ -172,6 +176,17 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
         self.async_write_ha_state()
 
+    @callback  # type: ignore
+    def _trigger_vending_state(self, event: Event) -> None:
+
+        if event.data.get("machine_id") != self._machine_id:
+            return None
+
+        self._attr_native_unit_of_measurement = ""
+        self._attr_native_value = "Vending"
+
+        self.async_write_ha_state()
+
 
 class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
     """Sensor showing whether a machine is in use."""
@@ -187,7 +202,9 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
         self.laundry: Laundry = coordinator.data
 
-        self._attr_unique_id = f"{username}_laundry_card_balance"
+        self._attr_unique_id = (
+            f"{self.laundry.profile.user_id}_{username}_laundry_card_balance"
+        )
 
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, config_id)},
@@ -202,7 +219,9 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
         profile: LaundryProfile = self.laundry.profile
 
-        self._attr_native_value = profile.card_balance
+        self._attr_native_value = (
+            0 if not profile.card_balance else profile.card_balance
+        )
 
         self._attr_icon = "mdi:credit-card-chip-outline"
 
@@ -315,7 +334,9 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
         )
 
         if unique_id:
-            return f"{base_return_str}_{time_descriptor}".lower().replace(" ", "_")
+            return f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
+                " ", "_"
+            )
 
         return (
             base_return_str.title()

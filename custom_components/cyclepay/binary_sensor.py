@@ -52,7 +52,7 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
-        self._attr_entity_registry_enabled_default = False
+        self._attr_entity_registry_visible_default = False
 
         self._machine_id = machine_id
 
@@ -63,7 +63,7 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
 
         machine_type_str = str(machine.type.value).title()
 
-        self._attr_unique_id = f"{machine_id}_running"
+        self._attr_unique_id = f"{self.laundry.profile.user_id}_{machine_id}_running"
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, machine_id)},
         }
@@ -72,11 +72,6 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
             "machine_type": machine_type_str,
             "base_price": f"${machine.base_price:0,.2f}",
         }
-
-        # if machine.topoff_price:
-        #     self._attr_extra_state_attributes.update(
-        #         {"topoff_price": f"${machine.topoff_price:0,.2f}"}
-        #     )
 
         self._attr_name = f"{machine_type_str} {machine.number}: Running"
 
