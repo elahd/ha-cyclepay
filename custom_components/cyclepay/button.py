@@ -111,33 +111,19 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
 
         return False
 
-    def update_device_data(self) -> None:
-        """Update device data when coordinator updates. To be implemented by child classes."""
-
-        raise NotImplementedError
-
     async def async_added_to_hass(self) -> None:
         """Register callbacks."""
-        await super().async_added_to_hass()
 
-        self.update_device_data()
+        await super().async_added_to_hass()
 
     @callback  # type: ignore
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
-        self.update_device_data()
-
         self.async_write_ha_state()
 
     async def _can_vend(self, num_swipes: int) -> bool:
         """Determine whether card and machine are able to vend."""
-
-        # Abort if machine is busy and we're being asked to vend a full load.
-        # if self.machine.busy and num_swipes > 1:
-        #     self._show_permission_error(
-        #         f"Cannot vend full cycle for dryer {self.machine.type.name.title()} {self.machine.number} because a cycle is already in progress."
-        #     )
 
         # Fetch topoff data if we don't already have it.
         if not self.machine.topoff_price or not self.machine.base_price:
@@ -160,17 +146,10 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
                 f"Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number}."
             )
 
-        # Make sure we're not requesting a topoff of a washer
+        # Make sure we're not requesting a topoff of a washer.
         if num_swipes > 1 and self.machine.type is not MachineType.DRYER:
             return self._show_permission_error(
                 f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because it is not a dryer."
-            )
-
-        # Abort topoff requests for an idle machine.
-
-        if num_swipes > 1 and not self.machine.busy:
-            return self._show_permission_error(
-                f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} until a cycle has started. Please swipe once and press the start button on the physical machine before topping off."
             )
 
         # Calculate cost of vend.
@@ -210,14 +189,6 @@ class SwipeOnceButton(BaseButton):
             id_suffix="single_swipe",
         )
 
-    def update_device_data(self) -> None:
-        """Update device data when coordinator updates."""
-
-        if self.machine.busy is True and self.machine.type == MachineType.WASHER:
-            self._attr_available = False
-
-        self._attr_available = True
-
     async def async_press(self) -> None:
         """Handle the button press."""
 
@@ -248,19 +219,11 @@ class SwipePreferredCycleButton(BaseButton):
         super().__init__(
             coordinator=coordinator,
             machine_id=machine_id,
-            name_suffix="Preferred Cycle Topoff",
+            name_suffix="Multi Swipe",
             id_suffix="multi_swipe",
         )
 
         self._config_entry = config_entry
-
-    def update_device_data(self) -> None:
-        """Update device data when coordinator updates."""
-
-        if not self.machine.busy:
-            self._attr_available = False
-
-        self._attr_available = True
 
     async def async_press(self) -> None:
         """Handle the button press."""
