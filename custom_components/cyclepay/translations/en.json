@@ -1,30 +1,30 @@
 {
-  "config": {
-    "abort": {
-      "already_configured": "Account is already configured"
-    },
-    "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_auth": "Invalid authentication",
-      "unknown": "Unexpected error"
-    },
-    "step": {
-      "user": {
-        "data": {
-          "username": "Username",
-          "password": "Password"
-        }
-      }
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "data": {
-          "full_dryer_load_swipes": "Preferred Dryer Cycle Topoff Swipes"
+    "config": {
+        "abort": {
+            "already_configured": "Account is already configured"
         },
-        "description": "Number of topoff swipes required for your preferred \"full\" dryer cycle. For dryers with a 30 min base time and 5 minute topoffs, enter \"6\" for a one hour load. (This would automate the six 5-minute topoff swipes for a one hour cycle.)"
-      }
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "username": "Username",
+                    "password": "Password"
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "full_dryer_load_swipes": "Number of Swipes"
+                },
+                "description": "The dryer multi-swipe button is a shortcut that swipes your card multiple times in a specific dryer. This is a quick way to run longer dryer cycles. For dryers with a 30 min base time and 5 minute topoffs, enter \"7\" for a one hour load. (This automates one 30-minute base swipe and six 5-minute topoff swipes.)"
+            }
+        }
     }
-  }
 }
