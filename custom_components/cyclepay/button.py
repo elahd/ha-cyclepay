@@ -166,7 +166,8 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
 
         if not vend_cost:
             return self._show_notification(
-                f"Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number} because cycle price could not be loaded."
+                f"""Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number}"""
+                """because cycle price could not be loaded."""
             )
 
         card_balance = (
