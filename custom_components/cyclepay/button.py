@@ -99,7 +99,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
 
         self._attr_name = f"{machine_type_str} {self.machine.number}: {name_suffix}"
 
-    def _show_permission_error(self, msg: str) -> Literal[False]:
+    def _show_notification(self, msg: str) -> Literal[False]:
         """Show Home Assistant notification to alert user of error."""
 
         persistent_notification.async_create(
@@ -131,7 +131,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
                 # Use returned instance of topoff data. Update won't be reflected in self.laundry until next coordinator update.
                 topoff_data = await self.laundry.async_get_topoff_data(self.machine.id_)
             except MachineOffline:
-                return self._show_permission_error(
+                return self._show_notification(
                     f"Cannot vend {self.machine.type.name.title()} {self.machine.number}. Machine is not connected to CyclePay."
                 )
 
@@ -142,15 +142,17 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
             self.machine.type == MachineType.DRYER
             and (not topoff_data or not isinstance(topoff_data.get("price"), float))
         ):
-            return self._show_permission_error(
+            return self._show_notification(
                 f"Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number}."
             )
 
         # Make sure we're not requesting a topoff of a washer.
         if num_swipes > 1 and self.machine.type is not MachineType.DRYER:
-            return self._show_permission_error(
+            return self._show_notification(
                 f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because it is not a dryer."
             )
+
+        vend_cost: float | None = None
 
         # Calculate cost of vend.
         if num_swipes == 1 and self.machine.busy:
@@ -162,6 +164,11 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
                 topoff_data.get("price") * (num_swipes - 1)
             )
 
+        if not vend_cost:
+            return self._show_notification(
+                f"Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number} because cycle price could not be loaded."
+            )
+
         card_balance = (
             0
             if not self.laundry.profile.card_balance
@@ -170,7 +177,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
 
         # Check if card has sufficient funds.
         if card_balance - vend_cost < 0:
-            return self._show_permission_error(
+            return self._show_notification(
                 f"Card balance of ${card_balance:.2f} is insufficient for the requested ${vend_cost:.2f} payment. Please add funds to your virtual card using the CyclePay app."
             )
 
@@ -231,7 +238,7 @@ class SwipePreferredCycleButton(BaseButton):
         num_swipes: int = self._config_entry.options.get(OPT_FULL_LOAD, 0)
 
         if num_swipes == 0:
-            self._show_permission_error(
+            self._show_notification(
                 f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because you have not yet configured your preferred cycle. Configure your preferred cycle in the CyclePay integration's settings."
             )
             return None
