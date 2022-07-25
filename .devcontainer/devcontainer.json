@@ -8,7 +8,7 @@
     "WORKSPACE_DIRECTORY": "/workspaces/ha-cyclepay",
     "POST_SET_VERSION_HOOK": "/workspaces/ha-cyclepay/.devcontainer/post-set-version-hook.sh"
   },
-  "postCreateCommand": "container install && pip install --upgrade pip && pip install -r requirements-dev.txt && pre-commit install && pre-commit install-hooks && pip install --editable /workspaces/pylaundry && chmod +x /workspaces/ha-cyclepay/.devcontainer/post-set-version-hook.sh",
+  "postCreateCommand": "container install && pip install --upgrade pip && pip install -r requirements-dev.txt && pre-commit install && pre-commit install-hooks && chmod +x /workspaces/ha-cyclepay/.devcontainer/post-set-version-hook.sh",
   "appPort": ["8123:8123"],
   "extensions": [
     "ms-python.vscode-pylance",
