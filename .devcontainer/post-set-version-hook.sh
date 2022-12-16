@@ -10,12 +10,12 @@ fi
 
 repo_url="https://github.com/home-assistant/core.git"
 git_root="/workspaces/core"
-workspace_dir=${WORKSPACE_DIRECTORY}
+workspace_dir="${WORKSPACE_DIRECTORY}"
 
 # Delete integration pylint directory if no version entered.
 if [ -z "$1" ]; then
     echo "No version supplied. Deleting existing development files."
-    rm -rf $workspace_dir/pylint
+    rm -rf "$workspace_dir/pylint"
     exit 1
 fi
 
@@ -40,5 +40,5 @@ fi
 
 # Symlink integration's custom_components folder into checked out code to enable hassfest.
 if [ "$(readlink $git_root/homeassistant/components/$integration_name)" != "$workspace_dir/custom_components/$integration_name" ]; then
-    ln -s $workspace_dir/custom_components/$integration_name $git_root/homeassistant/components/$integration_name
+    ln -s "$workspace_dir/custom_components/$integration_name" "$git_root/homeassistant/components/$integration_name"
 fi
