@@ -33,12 +33,12 @@ fi
 # Move pylint fiiles to integration pylint directory
 mkdir -p "$workspace_dir/pylint/plugins"
 
-if [ $(readlink "$workspace_dir/pylint") != "$git_root/pylint" ]; then
+if [ "$(readlink "$workspace_dir"/pylint\")" != "$git_root/pylint" ]; then
     rm -rf "$workspace_dir/pylint/plugins"
     cp -r "$git_root/pylint/plugins" "$workspace_dir/pylint/plugins"
 fi
 
 # Symlink integration's custom_components folder into checked out code to enable hassfest.
-if [ $(readlink "$git_root/homeassistant/components/$integration_name") != "$workspace_dir/custom_components/$integration_name" ]; then
-    ln -s "$workspace_dir/custom_components/$integration_name" "$git_root/homeassistant/components/$integration_name"
+if [ "$(readlink "$git_root"/homeassistant/components/"$integration_name")" != "$workspace_dir"/custom_components/"$integration_name" ]; then
+    ln -s "$workspace_dir""/custom_components/""$integration_name" "$git_root""/homeassistant/components/""$integration_name"
 fi
