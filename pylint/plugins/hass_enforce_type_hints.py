@@ -2665,10 +2665,7 @@ def _is_valid_type(
         return True
 
     if isinstance(expected_type, list):
-        for expected_type_item in expected_type:
-            if _is_valid_type(expected_type_item, node, in_return):
-                return True
-        return False
+        return any(_is_valid_type(expected_type_item, node, in_return) for expected_type_item in expected_type)
 
     # Const occurs when the type is None
     if expected_type is None or expected_type == "None":
@@ -2825,10 +2822,7 @@ def _get_named_annotation(
 def _has_valid_annotations(
     annotations: list[nodes.NodeNG | None],
 ) -> bool:
-    for annotation in annotations:
-        if annotation is not None:
-            return True
-    return False
+    return any(annotation is not None for annotation in annotations)
 
 
 def _get_module_platform(module_name: str) -> str | None:
