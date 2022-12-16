@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -z "${LIBRARY_NAME}" ] || [ -z "${LIBRARY_GIT_URL}" ] || [ -z "${INTEGRATION_NAME}" ] || [ -z "${WORKSPACE_DIRECTORY}" ]; then
+if [ -z "${LIBRARY_NAME}" ] || [ -z "${LIBRARY_GIT_URL}" ] || [ -z "${WORKSPACE_DIRECTORY}" ]; then
   exit 1
 else
   library_name="${LIBRARY_NAME}"
-  integration_name="${INTEGRATION_NAME}"
   repo_url="${LIBRARY_GIT_URL}"
   lib_dir="/workspaces/$library_name"
   workspace_dir="${WORKSPACE_DIRECTORY}"
@@ -62,14 +61,14 @@ INITIALIZING LIBRARY "$library_name"
 
 EOF
 
-if [ ! -d $lib_dir ]; then
+if [ ! -d "$lib_dir" ]; then
     echo "Cloning $library_name repository..."
     git clone "$repo_url" "$lib_dir"
 else
     echo "$library_name repository directory already exists."
 fi
 
-cd $lib_dir
+cd "$lib_dir"
 python setup.py develop
 
 pip install -r "$lib_dir/requirements-dev.txt"
