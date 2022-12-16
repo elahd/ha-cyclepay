@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 async def async_setup_entry(
     hass: core.HomeAssistant,
     entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,  # pylint: disable=unused-argument
+    async_add_entities: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,  # pylint: disable=unused-argument
 ) -> None:
     """Set up entities using the binary sensor platform from this config entry."""

@@ -36,6 +36,12 @@
       "type": "shell",
       "command": "container init",
       "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: hassfest.",
+      "type": "shell",
+      "command": "pre-commit run hassfest --all-files",
+      "problemMatcher": []
     }
   ]
 }

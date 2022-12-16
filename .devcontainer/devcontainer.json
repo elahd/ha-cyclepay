@@ -1,15 +1,18 @@
 {
-  "image": "ghcr.io/ludeeus/devcontainer/integration:stable",
-  "name": "ha-cyclepay",
+  "image": "ghcr.io/ludeeus/devcontainer/integration:latest",
+  "name": "alarmdotcom",
+  "appPort": ["8123:8123"],
   "features": {
     "github-cli": "latest"
   },
   "containerEnv": {
     "WORKSPACE_DIRECTORY": "/workspaces/ha-cyclepay",
-    "POST_SET_VERSION_HOOK": "/workspaces/ha-cyclepay/.devcontainer/post-set-version-hook.sh"
+    "POST_SET_VERSION_HOOK": "/workspaces/ha-cyclepay/.devcontainer/post-set-version-hook.sh",
+    "INTEGRATION_NAME": "cyclepay",
+    "LIBRARY_NAME": "pylaundry",
+    "LIBRARY_GIT_URL": "https://github.com/elahd/pylaundry.git"
   },
-  "postCreateCommand": "chmod +x /workspaces/ha-cyclepay/.devcontainer/post-create-script.sh && sh /workspaces/ha-cyclepay/.devcontainer/post-create-script.sh",
-  "appPort": ["8123:8123"],
+  "postCreateCommand": "chmod +x ${containerEnv:workspacePath}.devcontainer/post-create-script.sh && sh ${containerEnv:workspacePath}.devcontainer/post-create-script.sh",
   "extensions": [
     "ms-python.vscode-pylance",
     "github.vscode-pull-request-github",
