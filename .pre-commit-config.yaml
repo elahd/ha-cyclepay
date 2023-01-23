@@ -53,7 +53,7 @@ repos:
           - --exclude=examples
         files: ^(tests|custom_components)/.+\.py$
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.28.0
+    rev: v1.29.0
     hooks:
       - id: yamllint
         exclude: (.vscode|.devcontainer|pylint|.github)
@@ -73,7 +73,7 @@ repos:
         exclude: (.vscode|.devcontainer|pylint)
         additional_dependencies: [types-all]
   - repo: https://github.com/pappasam/toml-sort
-    rev: v0.20.1
+    rev: v0.22.3
     hooks:
       - id: toml-sort
   - repo: local
