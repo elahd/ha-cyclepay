@@ -242,7 +242,8 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
     """
     Sensor showing machine availability.
 
-    Shows how many machines of a specific type will be available (not in use and online) at the specified time interval.
+    Shows how many machines of a specific type will be available
+    (not in use and online) at the specified time interval.
     """
 
     def __init__(
