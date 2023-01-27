@@ -1,10 +1,41 @@
 {
+  "file_version": "2023.01.27",
   "version": "2.0.0",
   "tasks": [
     {
       "label": "Run pre-commit checks.",
       "type": "shell",
       "command": "pre-commit run --all-files",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: mypy.",
+      "type": "shell",
+      "command": "pre-commit run mypy --all-files",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: black.",
+      "type": "shell",
+      "command": "pre-commit run black --verbose --all-files",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: pylint.",
+      "type": "shell",
+      "command": "pre-commit run pylint --all-files",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: hassfest.",
+      "type": "shell",
+      "command": "pre-commit run hassfest --all-files",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run pre-commit: auto-update.",
+      "type": "shell",
+      "command": "pre-commit autoupdate",
       "problemMatcher": []
     },
     {
@@ -35,12 +66,6 @@
       "label": "Initialize development environment",
       "type": "shell",
       "command": "container init",
-      "problemMatcher": []
-    },
-    {
-      "label": "Run pre-commit: hassfest.",
-      "type": "shell",
-      "command": "pre-commit run hassfest --all-files",
       "problemMatcher": []
     }
   ]

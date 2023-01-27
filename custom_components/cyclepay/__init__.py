@@ -5,23 +5,20 @@ from datetime import timedelta
 import logging
 
 import async_timeout
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.config_entries import device_registry as dr
+from homeassistant.config_entries import ConfigEntry, device_registry as dr
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from homeassistant.helpers.update_coordinator import UpdateFailed
-from pylaundry import Laundry
-from pylaundry import MachineType
-from pylaundry.exceptions import AuthenticationError
-from pylaundry.exceptions import CommunicationError
-from pylaundry.exceptions import Rejected
-from pylaundry.exceptions import ResponseFormatError
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from pylaundry import Laundry, MachineType
+from pylaundry.exceptions import (
+    AuthenticationError,
+    CommunicationError,
+    Rejected,
+    ResponseFormatError,
+)
 
-from .const import DOMAIN
-from .const import STARTUP_MESSAGE
+from .const import DOMAIN, STARTUP_MESSAGE
 
 log = logging.getLogger(__name__)
 
@@ -80,7 +77,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         suggested_area="Laundry Room",
     )
 
-    for machine_type in [MachineType.WASHER, MachineType.DRYER]:
+    for machine_type in [  # pylint: disable=consider-using-tuple
+        MachineType.WASHER,
+        MachineType.DRYER,
+    ]:
         device_registry.async_get_or_create(
             config_entry_id=entry.entry_id,
             identifiers={(DOMAIN, machine_type.value)},

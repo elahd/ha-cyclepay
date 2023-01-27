@@ -11,19 +11,14 @@ from homeassistant.components.button import ButtonEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_platform import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from pylaundry import Laundry
-from pylaundry import LaundryMachine
-from pylaundry import MachineOffline
-from pylaundry import MachineType
+from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+)
+from pylaundry import Laundry, LaundryMachine, MachineOffline, MachineType
 
-from .const import DOMAIN
-from .const import EVENT_VEND_BEGIN
-from .const import OPT_FULL_LOAD
-
+from .const import DOMAIN, EVENT_VEND_BEGIN, OPT_FULL_LOAD
 
 log = logging.getLogger(__name__)
 
@@ -132,7 +127,9 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
                 topoff_data = await self.laundry.async_get_topoff_data(self.machine.id_)
             except MachineOffline:
                 return self._show_notification(
-                    f"Cannot vend {self.machine.type.name.title()} {self.machine.number}. Machine is not connected to CyclePay."
+                    "Cannot vend"
+                    f" {self.machine.type.name.title()} {self.machine.number}. Machine"
+                    " is not connected to CyclePay."
                 )
 
         log.debug(topoff_data)
@@ -143,13 +140,16 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
             and (not topoff_data or not isinstance(topoff_data.get("price"), float))
         ):
             return self._show_notification(
-                f"Cannot determine whether sufficient funds are available to vend {self.machine.type.name.title()} {self.machine.number}."
+                "Cannot determine whether sufficient funds are available to vend"
+                f" {self.machine.type.name.title()} {self.machine.number}."
             )
 
         # Make sure we're not requesting a topoff of a washer.
         if num_swipes > 1 and self.machine.type is not MachineType.DRYER:
             return self._show_notification(
-                f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because it is not a dryer."
+                "Cannot topoff"
+                f" {self.machine.type.name.title()} {self.machine.number} because it is"
+                " not a dryer."
             )
 
         vend_cost: float | None = None
@@ -179,14 +179,16 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
         # Check if card has sufficient funds.
         if card_balance - vend_cost < 0:
             return self._show_notification(
-                f"Card balance of ${card_balance:.2f} is insufficient for the requested ${vend_cost:.2f} payment. Please add funds to your virtual card using the CyclePay app."
+                f"Card balance of ${card_balance:.2f} is insufficient for the requested"
+                f" ${vend_cost:.2f} payment. Please add funds to your virtual card"
+                " using the CyclePay app."
             )
 
         return True
 
 
 class SwipeOnceButton(BaseButton):
-    """Integration button entity for swiping virtual card through machine a single time."""
+    """Button entity for swiping virtual card through machine a single time."""
 
     def __init__(self, coordinator: DataUpdateCoordinator, machine_id: str):
         """Pass coordinator to CoordinatorEntity."""
@@ -240,7 +242,10 @@ class SwipePreferredCycleButton(BaseButton):
 
         if num_swipes == 0:
             self._show_notification(
-                f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because you have not yet configured your preferred cycle. Configure your preferred cycle in the CyclePay integration's settings."
+                "Cannot topoff"
+                f" {self.machine.type.name.title()} {self.machine.number} because you"
+                " have not yet configured your preferred cycle. Configure your"
+                " preferred cycle in the CyclePay integration's settings."
             )
             return None
 
@@ -254,7 +259,6 @@ class SwipePreferredCycleButton(BaseButton):
 
         i = 0
         while i <= num_swipes:
-
             # Ensures that the machine state doesn't update while we're vending.
             self.hass.bus.async_fire(EVENT_VEND_BEGIN, {"machine_id": self.machine_id})
 

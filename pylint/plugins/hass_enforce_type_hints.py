@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class _Special(Enum):
-    """Sentinel values"""
+    """Sentinel values."""
 
     UNDEFINED = 1
 
@@ -374,7 +374,7 @@ _FUNCTION_MATCH: dict[str, list[TypeHintMatch]] = {
                 0: "HomeAssistant",
                 1: "ConfigEntry",
             },
-            return_type=_Special.UNDEFINED,
+            return_type="Mapping[str, Any]",
         ),
         TypeHintMatch(
             function_name="async_get_device_diagnostics",
@@ -383,7 +383,7 @@ _FUNCTION_MATCH: dict[str, list[TypeHintMatch]] = {
                 1: "ConfigEntry",
                 2: "DeviceEntry",
             },
-            return_type=_Special.UNDEFINED,
+            return_type="Mapping[str, Any]",
         ),
     ],
     "notify": [
@@ -1440,7 +1440,7 @@ _INHERITANCE_MATCH: dict[str, list[ClassTypeHintMatch]] = {
                 ),
                 TypeHintMatch(
                     function_name="set_humidity",
-                    arg_types={1: "str"},
+                    arg_types={1: "int"},
                     return_type=None,
                     has_async_counterpart=True,
                 ),
@@ -1966,6 +1966,10 @@ _INHERITANCE_MATCH: dict[str, list[ClassTypeHintMatch]] = {
         ClassTypeHintMatch(
             base_class="BaseNotificationService",
             matches=[
+                TypeHintMatch(
+                    function_name="targets",
+                    return_type=["dict[str, Any]", None],
+                ),
                 TypeHintMatch(
                     function_name="send_message",
                     arg_types={1: "str"},
@@ -2669,7 +2673,10 @@ def _is_valid_type(
         return True
 
     if isinstance(expected_type, list):
-        return any(_is_valid_type(expected_type_item, node, in_return) for expected_type_item in expected_type)
+        for expected_type_item in expected_type:
+            if _is_valid_type(expected_type_item, node, in_return):
+                return True
+        return False
 
     # Const occurs when the type is None
     if expected_type is None or expected_type == "None":
@@ -2826,11 +2833,14 @@ def _get_named_annotation(
 def _has_valid_annotations(
     annotations: list[nodes.NodeNG | None],
 ) -> bool:
-    return any(annotation is not None for annotation in annotations)
+    for annotation in annotations:
+        if annotation is not None:
+            return True
+    return False
 
 
 def _get_module_platform(module_name: str) -> str | None:
-    """Called when a Module node is visited."""
+    """Return the platform for the module name."""
     if not (module_match := _MODULE_REGEX.match(module_name)):
         # Ensure `homeassistant.components.<component>`
         # Or `homeassistant.components.<component>.<platform>`
@@ -2871,12 +2881,13 @@ class HassTypeHintChecker(BaseChecker):  # type: ignore[misc]
     )
 
     def __init__(self, linter: PyLinter | None = None) -> None:
+        """Initialize the HassTypeHintChecker."""
         super().__init__(linter)
         self._function_matchers: list[TypeHintMatch] = []
         self._class_matchers: list[ClassTypeHintMatch] = []
 
     def visit_module(self, node: nodes.Module) -> None:
-        """Called when a Module node is visited."""
+        """Populate matchers for a Module node."""
         self._function_matchers = []
         self._class_matchers = []
 
@@ -2900,7 +2911,7 @@ class HassTypeHintChecker(BaseChecker):  # type: ignore[misc]
         self._class_matchers.reverse()
 
     def visit_classdef(self, node: nodes.ClassDef) -> None:
-        """Called when a ClassDef node is visited."""
+        """Apply relevant type hint checks on a ClassDef node."""
         ancestor: nodes.ClassDef
         checked_class_methods: set[str] = set()
         ancestors = list(node.ancestors())  # cache result for inside loop
@@ -2927,7 +2938,7 @@ class HassTypeHintChecker(BaseChecker):  # type: ignore[misc]
                     checked_class_methods.add(function_node.name)
 
     def visit_functiondef(self, node: nodes.FunctionDef) -> None:
-        """Called when a FunctionDef node is visited."""
+        """Apply relevant type hint checks on a FunctionDef node."""
         for match in self._function_matchers:
             if not match.need_to_check_function(node) or node.is_method():
                 continue

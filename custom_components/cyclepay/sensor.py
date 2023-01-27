@@ -4,24 +4,18 @@ from __future__ import annotations
 import logging
 
 from homeassistant import core
-from homeassistant.components.sensor import SensorDeviceClass
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import callback
-from homeassistant.core import Event
-from homeassistant.core import HomeAssistant
+from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_platform import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from pylaundry import Laundry
-from pylaundry import LaundryMachine
-from pylaundry import LaundryProfile
-from pylaundry import MachineType
+from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+)
+from pylaundry import Laundry, LaundryMachine, LaundryProfile, MachineType
 
-from .const import DOMAIN
-from .const import EVENT_VEND_BEGIN
+from .const import DOMAIN, EVENT_VEND_BEGIN
 
 log = logging.getLogger(__name__)
 
@@ -82,7 +76,13 @@ async def async_setup_entry(
             )
             for machine_type in MachineType
             if machine_type != MachineType.UNKNOWN
-            for time_offset in [0, 15, 30, 45, 60]
+            for time_offset in [  # pylint: disable=consider-using-tuple
+                0,
+                15,
+                30,
+                45,
+                60,
+            ]
         ),
         True,
     )
@@ -148,7 +148,6 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
         self._attr_extra_state_attributes.update({"running": machine.busy})
 
         if self._machine_type in [MachineType.WASHER, MachineType.DRYER]:
-
             icon_prefix = (
                 "washing-machine"
                 if self._machine_type == MachineType.WASHER
@@ -178,7 +177,6 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
     @callback  # type: ignore
     def _trigger_vending_state(self, event: Event) -> None:
-
         if event.data.get("machine_id") != self._machine_id:
             return None
 
@@ -241,7 +239,11 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
 
 class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
-    """Sensor showing how many machines of a specific type will be available (not in use and online) at the specified time interval."""
+    """
+    Sensor showing machine availability.
+
+    Shows how many machines of a specific type will be available (not in use and online) at the specified time interval.
+    """
 
     def __init__(
         self,
@@ -304,7 +306,9 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
         )
 
         self._attr_extra_state_attributes = {
-            "as_percent": f"{round((self._attr_native_value / total_machines_in_room) * 100)}%",
+            "as_percent": (
+                f"{round((self._attr_native_value / total_machines_in_room) * 100)}%"
+            ),
             f"total_{self._machine_type.value.lower()}s_in_laundry_room": total_machines_in_room,
         }
 
@@ -334,8 +338,10 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
         )
 
         if unique_id:
-            return f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
-                " ", "_"
+            return (
+                f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
+                    " ", "_"
+                )
             )
 
         return (

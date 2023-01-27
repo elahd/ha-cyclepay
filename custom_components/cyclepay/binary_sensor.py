@@ -4,18 +4,19 @@ from __future__ import annotations
 import logging
 
 from homeassistant import core
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import callback
 from homeassistant.helpers.entity import DeviceInfo
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity_platform import DiscoveryInfoType
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from pylaundry import Laundry
-from pylaundry import LaundryMachine
-from pylaundry import MachineType
+from homeassistant.helpers.entity_platform import AddEntitiesCallback, DiscoveryInfoType
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+)
+from pylaundry import Laundry, LaundryMachine, MachineType
 
 from .const import DOMAIN
 
@@ -91,7 +92,6 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
         )
 
         if self._machine_type in [MachineType.WASHER, MachineType.DRYER]:
-
             icon_prefix = (
                 "washing-machine"
                 if self._machine_type == MachineType.WASHER

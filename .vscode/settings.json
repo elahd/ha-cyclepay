@@ -1,4 +1,5 @@
 {
+  "file_version": "2023.01.27",
   "files.eol": "\n",
   "editor.tabSize": 4,
   "python.analysis.autoSearchPaths": false,
@@ -23,5 +24,8 @@
   "npm.autoDetect": "off",
   "files.associations": {
     "*.yaml": "home-assistant"
-  }
+  },
+  "git.ignoredRepositories": [
+    "/workspaces/core"
+],
 }
