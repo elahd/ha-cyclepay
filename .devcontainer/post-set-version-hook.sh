@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# File Version: 2023.01.27
+
 echo "Running HA post-set-version-hook."
 
 if [ -z "${INTEGRATION_NAME}" ] || [ -z "${WORKSPACE_DIRECTORY}" ]; then
