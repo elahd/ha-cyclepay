@@ -110,9 +110,13 @@ class OptionsFlow(config_entries.OptionsFlow):  # type: ignore
             {
                 vol.Required(
                     OPT_FULL_LOAD,
-                    default=0
-                    if not (full_dryer_load_swipes := self.options.get(OPT_FULL_LOAD))
-                    else full_dryer_load_swipes,
+                    default=(
+                        0
+                        if not (
+                            full_dryer_load_swipes := self.options.get(OPT_FULL_LOAD)
+                        )
+                        else full_dryer_load_swipes
+                    ),
                 ): int
             }
         )

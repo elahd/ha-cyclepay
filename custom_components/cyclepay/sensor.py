@@ -310,7 +310,9 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
             "as_percent": (
                 f"{round((self._attr_native_value / total_machines_in_room) * 100)}%"
             ),
-            f"total_{self._machine_type.value.lower()}s_in_laundry_room": total_machines_in_room,
+            f"total_{self._machine_type.value.lower()}s_in_laundry_room": (
+                total_machines_in_room
+            ),
         }
 
     async def async_added_to_hass(self) -> None:
