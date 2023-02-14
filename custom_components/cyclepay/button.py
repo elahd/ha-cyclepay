@@ -238,9 +238,9 @@ class SwipePreferredCycleButton(BaseButton):
     async def async_press(self) -> None:
         """Handle the button press."""
 
-        num_swipes: int = self._config_entry.options.get(OPT_FULL_LOAD, 0)
+        num_swipes: int
 
-        if num_swipes == 0:
+        if (num_swipes := self._config_entry.options.get(OPT_FULL_LOAD, 0)) == 0:
             self._show_notification(
                 "Cannot topoff"
                 f" {self.machine.type.name.title()} {self.machine.number} because you"

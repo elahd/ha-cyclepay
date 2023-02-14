@@ -11,8 +11,8 @@
         "step": {
             "user": {
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "password": "Password",
+                    "username": "Username"
                 }
             }
         }
@@ -23,7 +23,8 @@
                 "data": {
                     "full_dryer_load_swipes": "Number of Swipes"
                 },
-                "description": "The dryer multi-swipe button is a shortcut that swipes your card multiple times in a specific dryer. This is a quick way to run longer dryer cycles. For dryers with a 30 min base time and 5 minute topoffs, enter \"7\" for a one hour load. (This automates one 30-minute base swipe and six 5-minute topoff swipes.)"
+                "description": "The dryer multi-swipe button is a shortcut that swipes your card multiple times in a specific dryer. This is a quick way to run longer dryer cycles. For dryers with a 30 min base time and 5 minute topoffs, enter \"7\" for a one hour load. (This automates one 30-minute base swipe and six 5-minute topoff swipes.)",
+                "title": "Dryer Multi-Swipe Options"
             }
         }
     }
