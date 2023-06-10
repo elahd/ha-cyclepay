@@ -74,6 +74,7 @@ Install via HACS.
 ## Python Library
 
 This integration communicates with CyclePay via:
+
 <p><a href="https://github.com/elahd/pylaundry">
 <img src="https://user-images.githubusercontent.com/466460/174422077-452bdd5c-243b-4487-8bd8-07a0120284d2.png" width="200px" />
 </a></p>

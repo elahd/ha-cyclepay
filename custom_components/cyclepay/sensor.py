@@ -36,9 +36,7 @@ async def async_setup_entry(
     coordinator_data: Laundry = coordinator.data
     async_add_entities(
         (
-            MachineMinutesRemainingSensor(
-                coordinator=coordinator, machine_id=machine.id_, hass=hass
-            )
+            MachineMinutesRemainingSensor(coordinator=coordinator, machine_id=machine.id_, hass=hass)
             for machine in coordinator_data.machines.values()
             if isinstance(machine, LaundryMachine)
         ),
@@ -95,9 +93,7 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
     # _attr_device_class = SensorDeviceClass.DURATION
     # _attr_native_unit_of_measurement = homeassistant.const.TIME_MINUTES
 
-    def __init__(
-        self, coordinator: DataUpdateCoordinator, machine_id: str, hass: HomeAssistant
-    ) -> None:
+    def __init__(self, coordinator: DataUpdateCoordinator, machine_id: str, hass: HomeAssistant) -> None:
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
@@ -110,9 +106,7 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
         machine_type_str = str(self.machine.type.value).title()
 
-        self._attr_unique_id = (
-            f"{self.laundry.profile.user_id}_{machine_id}_minutes_remaining"
-        )
+        self._attr_unique_id = f"{self.laundry.profile.user_id}_{machine_id}_minutes_remaining"
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, machine_id)},
             "name": f"{machine_type_str} {self.machine.number}",
@@ -139,20 +133,14 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
         machine: LaundryMachine = self.laundry.machines.get(self._machine_id)
 
         if machine.online:
-            self._attr_native_value = (
-                machine.minutes_remaining if machine.minutes_remaining else 0
-            )
+            self._attr_native_value = machine.minutes_remaining if machine.minutes_remaining else 0
         else:
             self._attr_native_value = None
 
         self._attr_extra_state_attributes.update({"running": machine.busy})
 
         if self._machine_type in [MachineType.WASHER, MachineType.DRYER]:
-            icon_prefix = (
-                "washing-machine"
-                if self._machine_type == MachineType.WASHER
-                else "tumble-dryer"
-            )
+            icon_prefix = "washing-machine" if self._machine_type == MachineType.WASHER else "tumble-dryer"
 
             if not machine.online:
                 self._attr_icon = f"mdi:{icon_prefix}-alert"
@@ -167,7 +155,7 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
         self.update_device_data()
 
-    @callback  # type: ignore
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
@@ -175,10 +163,10 @@ class MachineMinutesRemainingSensor(SensorEntity, CoordinatorEntity):  # type: i
 
         self.async_write_ha_state()
 
-    @callback  # type: ignore
+    @callback
     def _trigger_vending_state(self, event: Event) -> None:
         if event.data.get("machine_id") != self._machine_id:
-            return None
+            return
 
         self._attr_native_unit_of_measurement = ""
         self._attr_native_value = "Vending"
@@ -192,17 +180,13 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
     _attr_device_class = SensorDeviceClass.MONETARY
     _attr_native_unit_of_measurement = "USD"
 
-    def __init__(
-        self, coordinator: DataUpdateCoordinator, username: str, config_id: str
-    ):
+    def __init__(self, coordinator: DataUpdateCoordinator, username: str, config_id: str):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator=coordinator)
 
         self.laundry: Laundry = coordinator.data
 
-        self._attr_unique_id = (
-            f"{self.laundry.profile.user_id}_{username}_laundry_card_balance"
-        )
+        self._attr_unique_id = f"{self.laundry.profile.user_id}_{username}_laundry_card_balance"
 
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, config_id)},
@@ -217,9 +201,7 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
         profile: LaundryProfile = self.laundry.profile
 
-        self._attr_native_value = (
-            0 if not profile.card_balance else profile.card_balance
-        )
+        self._attr_native_value = 0 if not profile.card_balance else profile.card_balance
 
         self._attr_icon = "mdi:credit-card-chip-outline"
 
@@ -229,7 +211,7 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
         self.update_device_data()
 
-    @callback  # type: ignore
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
@@ -239,8 +221,7 @@ class CardBalanceSensor(SensorEntity, CoordinatorEntity):  # type: ignore
 
 
 class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
-    """
-    Sensor showing machine availability.
+    """Sensor showing machine availability.
 
     Shows how many machines of a specific type will be available
     (not in use and online) at the specified time interval.
@@ -286,11 +267,7 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
             ]
         )
 
-        icon_prefix = (
-            "washing-machine"
-            if self._machine_type == MachineType.WASHER
-            else "tumble-dryer"
-        )
+        icon_prefix = "washing-machine" if self._machine_type == MachineType.WASHER else "tumble-dryer"
 
         if self._attr_native_value > 0:
             self._attr_icon = f"mdi:{icon_prefix}"
@@ -301,18 +278,13 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
             [
                 machines
                 for machine in machines.values()
-                if isinstance(machine, LaundryMachine)
-                and machine.type == self._machine_type
+                if isinstance(machine, LaundryMachine) and machine.type == self._machine_type
             ]
         )
 
         self._attr_extra_state_attributes = {
-            "as_percent": (
-                f"{round((self._attr_native_value / total_machines_in_room) * 100)}%"
-            ),
-            f"total_{self._machine_type.value.lower()}s_in_laundry_room": (
-                total_machines_in_room
-            ),
+            "as_percent": f"{round((self._attr_native_value / total_machines_in_room) * 100)}%",
+            f"total_{self._machine_type.value.lower()}s_in_laundry_room": total_machines_in_room,
         }
 
     async def async_added_to_hass(self) -> None:
@@ -321,7 +293,7 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
 
         self.update_device_data()
 
-    @callback  # type: ignore
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
@@ -332,23 +304,11 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
     def _generate_name(self, unique_id: bool = False) -> str:
         """Generate a name or unique ID for the entity."""
 
-        time_descriptor = (
-            "now" if self._time_offset == 0 else f"in {self._time_offset} min"
-        )
+        time_descriptor = "now" if self._time_offset == 0 else f"in {self._time_offset} min"
 
-        base_return_str = (
-            f"{str(self._machine_type.value).lower()}s Available {time_descriptor}"
-        )
+        base_return_str = f"{str(self._machine_type.value).lower()}s Available {time_descriptor}"
 
         if unique_id:
-            return (
-                f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
-                    " ", "_"
-                )
-            )
+            return f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(" ", "_")
 
-        return (
-            base_return_str.title()
-            if self._time_offset == 0
-            else f"{base_return_str}utes".title()
-        )
+        return base_return_str.title() if self._time_offset == 0 else f"{base_return_str}utes".title()

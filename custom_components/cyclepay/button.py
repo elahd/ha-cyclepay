@@ -51,9 +51,7 @@ async def async_setup_entry(
     # Create base + topoff buttons for dryers
     async_add_entities(
         (
-            SwipePreferredCycleButton(
-                coordinator=coordinator, machine_id=machine.id_, config_entry=entry
-            )
+            SwipePreferredCycleButton(coordinator=coordinator, machine_id=machine.id_, config_entry=entry)
             for machine in coordinator_data.machines.values()
             if isinstance(machine, LaundryMachine) and machine.type == MachineType.DRYER
         ),
@@ -85,9 +83,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
         self.machine_type: MachineType = self.machine.type
         machine_type_str = str(self.machine.type.value).title()
 
-        self._attr_unique_id = (
-            f"{self.laundry.profile.user_id}_{machine_id}_{id_suffix}"
-        )
+        self._attr_unique_id = f"{self.laundry.profile.user_id}_{machine_id}_{id_suffix}"
         self._attr_device_info: DeviceInfo | None = {
             "identifiers": {(DOMAIN, machine_id)},
         }
@@ -111,7 +107,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
 
         await super().async_added_to_hass()
 
-    @callback  # type: ignore
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
@@ -147,9 +143,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
         # Make sure we're not requesting a topoff of a washer.
         if num_swipes > 1 and self.machine.type is not MachineType.DRYER:
             return self._show_notification(
-                "Cannot topoff"
-                f" {self.machine.type.name.title()} {self.machine.number} because it is"
-                " not a dryer."
+                f"Cannot topoff {self.machine.type.name.title()} {self.machine.number} because it is not a dryer."
             )
 
         vend_cost: float | None = None
@@ -160,9 +154,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
         elif num_swipes == 1 and not self.machine.busy:
             vend_cost = self.machine.base_price
         elif num_swipes > 1 and self.machine.busy:
-            vend_cost = self.machine.base_price - (
-                topoff_data.get("price") * (num_swipes - 1)
-            )
+            vend_cost = self.machine.base_price - (topoff_data.get("price") * (num_swipes - 1))
 
         if not vend_cost:
             return self._show_notification(
@@ -170,11 +162,7 @@ class BaseButton(ButtonEntity, CoordinatorEntity):  # type: ignore
                 """because cycle price could not be loaded."""
             )
 
-        card_balance = (
-            0
-            if not self.laundry.profile.card_balance
-            else self.laundry.profile.card_balance
-        )
+        card_balance = 0 if not self.laundry.profile.card_balance else self.laundry.profile.card_balance
 
         # Check if card has sufficient funds.
         if card_balance - vend_cost < 0:
@@ -207,7 +195,7 @@ class SwipeOnceButton(BaseButton):
 
         if not await self._can_vend(num_swipes=1):
             self._attr_available = True
-            return None
+            return
 
         await self.laundry.async_vend(self.machine_id)
 
@@ -247,7 +235,7 @@ class SwipePreferredCycleButton(BaseButton):
                 " have not yet configured your preferred cycle. Configure your"
                 " preferred cycle in the CyclePay integration's settings."
             )
-            return None
+            return
 
         self._attr_available = False
 
@@ -255,7 +243,7 @@ class SwipePreferredCycleButton(BaseButton):
 
         if not await self._can_vend(num_swipes=num_swipes):
             self._attr_available = True
-            return None
+            return
 
         i = 0
         while i <= num_swipes:

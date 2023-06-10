@@ -1,11 +1,12 @@
 """The CyclePay integration."""
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
+from datetime import timedelta
 
 import async_timeout
-from homeassistant.config_entries import ConfigEntry, device_registry as dr
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import device_registry as dr
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -42,9 +43,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     laundry = Laundry(async_get_clientsession(hass))
 
     try:
-        await laundry.async_login(
-            username=entry.data["username"], password=entry.data["password"]
-        )
+        await laundry.async_login(username=entry.data["username"], password=entry.data["password"])
     except (CommunicationError, ResponseFormatError, Rejected) as err:
         raise ConfigEntryNotReady from err
     except AuthenticationError as err:

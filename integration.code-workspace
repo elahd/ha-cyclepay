@@ -1,0 +1,47 @@
+{
+    "folders": [
+        {
+            "path": "/workspaces/ha-cyclepay"
+        },
+        {
+            "path": "/workspaces/pylaundry"
+        }
+    ],
+    "settings": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "python.analysis.autoSearchPaths": false,
+        "python.analysis.extraPaths": ["/workspaces/pylaundry"],
+        "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.languageServer": "Pylance",
+        "python.testing.pytestEnabled": true,
+        "python.linting.mypyEnabled": false,
+        // "python.linting.pylintEnabled": true,
+        "python.analysis.exclude": ["/**/.*/", "**/__pycache__"],
+        "python.analysis.diagnosticMode": "workspace",
+        "python.analysis.typeCheckingMode": "off",
+        "python.analysis.include": [
+            "**/custom_components/ha-cyclepay",
+            "**/pylaundry/pylaundry",
+            "**/pylaundry/tests",
+            "**/pylaundry/examples"
+        ],
+        "files.associations": {
+            "*.yaml": "home-assistant"
+        },
+        "python.analysis.autoImportCompletions": true,
+        "python.analysis.inlayHints.callArgumentNames": false,
+        "python.analysis.inlayHints.functionReturnTypes": false,
+        "python.analysis.inlayHints.pytestParameters": false,
+        "python.analysis.inlayHints.variableTypes": false,
+        "python.analysis.packageIndexDepths": [
+            {
+                "name": "pylaundry",
+                "depth": 5,
+                "includeAllSymbols": true
+            }
+        ]
+    }
+}

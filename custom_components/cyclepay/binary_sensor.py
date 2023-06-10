@@ -87,16 +87,10 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
 
         self._attr_is_on = machine.busy if machine.online else None
 
-        self._attr_extra_state_attributes.update(
-            {"minutes_remaining": machine.minutes_remaining}
-        )
+        self._attr_extra_state_attributes.update({"minutes_remaining": machine.minutes_remaining})
 
         if self._machine_type in [MachineType.WASHER, MachineType.DRYER]:
-            icon_prefix = (
-                "washing-machine"
-                if self._machine_type == MachineType.WASHER
-                else "tumble-dryer"
-            )
+            icon_prefix = "washing-machine" if self._machine_type == MachineType.WASHER else "tumble-dryer"
 
             if not machine.online:
                 self._attr_icon = f"mdi:{icon_prefix}-alert"
@@ -111,7 +105,7 @@ class MachineInUseSensor(BinarySensorEntity, CoordinatorEntity):  # type: ignore
 
         self.update_device_data()
 
-    @callback  # type: ignore
+    @callback
     def _handle_coordinator_update(self) -> None:
         """Update the entity with new REST API data."""
 
