@@ -8,7 +8,7 @@
     "customizations": {
         "codespaces": {
             "repositories": {
-                "pyha-cyclepay/pylaundry": {
+                "elahd/pylaundry": {
                     "permissions": "write-all"
                 }
             }
