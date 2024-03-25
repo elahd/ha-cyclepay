@@ -1,4 +1,5 @@
 """Binary sensor API entity."""
+
 from __future__ import annotations
 
 import logging
@@ -341,10 +342,8 @@ class AvailableMachines(SensorEntity, CoordinatorEntity):  # type: ignore
         )
 
         if unique_id:
-            return (
-                f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
-                    " ", "_"
-                )
+            return f"{self.laundry.profile.user_id}_{base_return_str}_{time_descriptor}".lower().replace(
+                " ", "_"
             )
 
         return (
